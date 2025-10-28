@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import useGetStrokeResult from "../composables/useGetStrokeResult";
 import useGetKopenhagenResults from "../composables/useGetKopenhagenResults";
+import { useCounterStore } from "~/stores/counter";
 import mappPlayers from "../mapper/mappPlayers";
 const selectedPlayers = ref([]);
 const users = <any>ref([]);
 const selectedPlayersCheckboxes = [];
 const players = ref([]);
 const showScores = ref(false);
-users.value = await $fetch("/api/getUsers");
+users.value = useCounterStore().getUsers();
 function getTotalPoints(name) {
   let points = 0;
   useGetKopenhagenResults(players.value).forEach((player) => {
@@ -22,26 +23,14 @@ function selectPlayer(name: string) {
     selectedPlayers.value = selectedPlayers.value.filter(
       (item) => item !== name
     );
-    $fetch("/api/updateSelection", {
-      method: "POST",
-      body: {
-        name,
-        selected: "false",
-      },
-    });
+    useCounterStore().updateSelection(name, false);
   } else {
+    useCounterStore().updateSelection(name, true);
     selectedPlayers.value.push(name);
-    $fetch("/api/updateSelection", {
-      method: "POST",
-      body: {
-        name,
-        selected: "true",
-      },
-    });
   }
 }
 async function getPlayers() {
-  const players = await $fetch("/api/getPlayers");
+  const players = useCounterStore().getPlayers();
   return mappPlayers(players);
 }
 async function startGame() {
@@ -49,7 +38,7 @@ async function startGame() {
   showScores.value = true;
 }
 async function resetScores() {
-  await $fetch("/api/resetPlayers");
+  useCounterStore().resetPlayers();
   selectedPlayersCheckboxes.forEach((item) => {
     item.checked = false;
   });
@@ -62,16 +51,7 @@ function getPlayerResult(player, index) {
 async function updateScore(event, index, player) {
   const result = player.result;
   result[index - 1] = { [index]: parseInt(event.target.value) };
-
-  // update scoreset
-  $fetch("/api/updateScore", {
-    method: "POST",
-    body: {
-      player,
-      result,
-      hole: index,
-    },
-  });
+  useCounterStore().updateScore(player);
   players.value = await getPlayers();
 }
 </script>
@@ -111,13 +91,14 @@ async function updateScore(event, index, player) {
             <td
               class="border-b border-gray-100 p-2 text-gray-500 dark:border-gray-700 dark:text-gray-400"
             >
-              {{ user.Name }}
+              {{ user.name }}
             </td>
             <td
               class="border-b border-gray-100 p-2 text-gray-500 dark:border-gray-700 dark:text-gray-400"
             >
               {{
-                user.Handicap.toString()
+                user.handicap
+                  .toString()
                   .replace("[", "")
                   .replace("]", "")
                   .replaceAll(",", " ")
@@ -131,13 +112,13 @@ async function updateScore(event, index, player) {
                   type="checkbox"
                   ref="selectedPlayersCheckboxes"
                   class="hidden peer"
-                  @click="selectPlayer(user.Name)"
-                  :id="`selected-${user.Name}`"
+                  @click="selectPlayer(user.name)"
+                  :id="`selected-${user.name}`"
                   name="handicap"
                 />
                 <label
                   class="cursor-pointer flex items-center justify-center rounded-lg border-2 border-gray-200 py-3 px-6 text-gray-700 transition-colors duration-200 ease-in-out peer-checked:bg-green-500 peer-checked:text-white"
-                  :for="`selected-${user.Name}`"
+                  :for="`selected-${user.name}`"
                   >select</label
                 >
               </div>

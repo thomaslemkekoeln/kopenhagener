@@ -8,12 +8,11 @@ export default function mappPlayers(players) {
 }
 function mappPlayer(player) {
   return {
-    name: player.Name,
-    handicap: player.Handicap ? JSON.parse(player.Handicap) : [],
-    selected: player.Selected,
-    result: player.Result ? JSON.parse(player.Result) : [],
-    handicapResult:
-      mappResult(JSON.parse(player.Result), JSON.parse(player.Handicap)) || [],
+    name: player.name,
+    handicap: player.handicap || [],
+    selected: player.selected,
+    result: player.result || [],
+    handicapResult: mappResult(player.result, player.handicap) || [],
   };
 }
 function mappResult(result, handicap) {

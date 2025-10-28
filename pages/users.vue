@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import { useCounterStore } from "~/stores/counter";
 const nameInput = ref("");
 const handicapCheckboxes = ref([]);
 const handicap = ref([]);
 const users = <any>ref([]);
-users.value = await $fetch("/api/getUsers");
+users.value = useCounterStore().getUsers();
 function updateHandicap(index: number) {
   if (handicap.value.includes(index)) {
     handicap.value = handicap.value.filter((item) => item !== index);
@@ -17,30 +18,23 @@ function submit() {
     result.push({ [i + 1]: 0 });
   }
   if (nameInput.value.length > 0) {
-    $fetch("/api/addUser", {
-      method: "POST",
-      body: {
-        name: nameInput.value,
-        handicap: JSON.stringify(handicap.value),
-        result,
-      },
-    }).then(async () => {
-      users.value = await $fetch("/api/getUsers");
-      nameInput.value = "";
-      handicap.value = [];
-      handicapCheckboxes.value.forEach((item) => {
-        item.checked = false;
-      });
+    useCounterStore().addUser({
+      name: nameInput.value,
+      handicap: JSON.stringify(handicap.value),
+      selected: false,
+      result,
+    });
+    users.value = useCounterStore().getUsers();
+    nameInput.value = "";
+    handicap.value = [];
+    handicapCheckboxes.value.forEach((item) => {
+      item.checked = false;
     });
   }
 }
 function clearUser(userName: string) {
-  $fetch("/api/deleteUser", {
-    method: "POST",
-    body: { name: userName },
-  }).then(async () => {
-    users.value = await $fetch("/api/getUsers");
-  });
+  useCounterStore().deleteUser(userName);
+  users.value = useCounterStore().getUsers();
 }
 </script>
 
@@ -116,13 +110,14 @@ function clearUser(userName: string) {
           <td
             class="border-b border-gray-100 p-2 text-gray-500 dark:border-gray-700 dark:text-gray-400"
           >
-            {{ user.Name }}
+            {{ user.name }}
           </td>
           <td
             class="border-b border-gray-100 p-2 text-gray-500 dark:border-gray-700 dark:text-gray-400"
           >
             {{
-              user.Handicap.toString()
+              user.handicap
+                .toString()
                 .replace("[", "")
                 .replace("]", "")
                 .replaceAll(",", " ")
@@ -133,7 +128,7 @@ function clearUser(userName: string) {
           >
             <button
               class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-              @click="clearUser(user.Name)"
+              @click="clearUser(user.name)"
             >
               x
             </button>
