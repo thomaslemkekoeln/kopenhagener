@@ -88,18 +88,18 @@ function clearUser(userName: string) {
       <thead>
         <tr>
           <th
-            class="border-b border-gray-200 p-2 font-medium text-gray-400 dark:border-gray-600 dark:text-gray-200"
+            class="border-b border-gray-200 p-2 font-medium text-gray-600 dark:border-gray-600 dark:text-gray-400"
           >
             Name
           </th>
           <th
-            class="border-b border-gray-200 p-2 font-medium text-gray-400 dark:border-gray-600 dark:text-gray-200"
+            class="border-b border-gray-200 p-2 font-medium text-gray-600 dark:border-gray-600 dark:text-gray-400"
           >
             Vorgabe
           </th>
 
           <th
-            class="border-b border-gray-200 p-2 font-medium text-gray-400 dark:border-gray-600 dark:text-gray-200"
+            class="border-b border-gray-200 p-2 font-medium text-gray-600 dark:border-gray-600 dark:text-gray-400"
           >
             Delete
           </th>

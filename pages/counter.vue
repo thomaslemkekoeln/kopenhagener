@@ -144,13 +144,13 @@ async function updateScore(event, index, player) {
         <thead>
           <tr>
             <th
-              class="border-b border-gray-200 p-1 font-medium text-gray-400 dark:border-gray-600 dark:text-gray-200"
+              class="border-b border-gray-200 p-1 font-medium text-gray-600 dark:border-gray-600 dark:text-gray-400"
             >
               Loch
             </th>
             <th
               v-for="player in players"
-              class="border-b border-gray-200 p-1 font-medium text-gray-400 dark:border-gray-600 dark:text-gray-200"
+              class="border-b border-gray-200 p-1 font-medium text-gray-600 dark:border-gray-600 dark:text-gray-400"
             >
               {{ player.name }}
             </th>
