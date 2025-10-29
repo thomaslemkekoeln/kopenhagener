@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import useGetStrokeResult from "../composables/useGetStrokeResult";
 import useGetKopenhagenResults from "../composables/useGetKopenhagenResults";
+import useLocalStore from "../composables/useLocalStore";
 import { useCounterStore } from "~/stores/counter";
 import mappPlayers from "../mapper/mappPlayers";
 const selectedPlayers = ref([]);
@@ -9,6 +10,14 @@ const selectedPlayersCheckboxes = [];
 const players = ref([]);
 const showScores = ref(false);
 users.value = useCounterStore().getUsers();
+onMounted(async () => {
+  const localStore = await useLocalStore("get");
+  useCounterStore().updateUsers(localStore);
+  useCounterStore().$subscribe((mutation, state) => {
+    useLocalStore("set", state.users);
+  });
+  users.value = useCounterStore().getUsers();
+});
 function getTotalPoints(name) {
   let points = 0;
   useGetKopenhagenResults(players.value).forEach((player) => {
@@ -69,18 +78,18 @@ async function updateScore(event, index, player) {
         <thead>
           <tr>
             <th
-              class="border-b border-gray-200 p-2 font-medium text-gray-400 dark:border-gray-600 dark:text-gray-200"
+              class="border-b border-gray-200 p-2 font-medium text-gray-600 dark:border-gray-600 dark:text-gray-400"
             >
               Name
             </th>
             <th
-              class="border-b border-gray-200 p-2 font-medium text-gray-400 dark:border-gray-600 dark:text-gray-200"
+              class="border-b border-gray-200 p-2 font-medium text-gray-600 dark:border-gray-600 dark:text-gray-400"
             >
               Vorgabe
             </th>
 
             <th
-              class="border-b border-gray-200 p-2 font-medium text-gray-400 dark:border-gray-600 dark:text-gray-200"
+              class="border-b border-gray-200 p-2 font-medium text-gray-600 dark:border-gray-600 dark:text-gray-400"
             >
               Select
             </th>
@@ -158,9 +167,7 @@ async function updateScore(event, index, player) {
         </thead>
         <tbody>
           <tr v-for="index in 18" :key="index">
-            <td
-              class="border-b border-gray-100 text-gray-500 dark:border-gray-700 dark:text-gray-400"
-            >
+            <td class="border-3 text-lg border-gray-300 rounded text-center">
               {{ index }}
             </td>
 

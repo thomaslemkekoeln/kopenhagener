@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { useCounterStore } from "~/stores/counter";
+import useLocalStore from "../composables/useLocalStore";
 const nameInput = ref("");
 const handicapCheckboxes = ref([]);
 const handicap = ref([]);
 const users = <any>ref([]);
-users.value = useCounterStore().getUsers();
 function updateHandicap(index: number) {
   if (handicap.value.includes(index)) {
     handicap.value = handicap.value.filter((item) => item !== index);
@@ -12,6 +12,14 @@ function updateHandicap(index: number) {
     handicap.value.push(index);
   }
 }
+onMounted(async () => {
+  const localStore = await useLocalStore("get");
+  useCounterStore().updateUsers(localStore);
+  useCounterStore().$subscribe((mutation, state) => {
+    useLocalStore("set", state.users);
+  });
+  users.value = useCounterStore().getUsers();
+});
 function submit() {
   const result = [];
   for (let i = 0; i < 18; i++) {
@@ -20,7 +28,7 @@ function submit() {
   if (nameInput.value.length > 0) {
     useCounterStore().addUser({
       name: nameInput.value,
-      handicap: JSON.stringify(handicap.value),
+      handicap: handicap.value,
       selected: false,
       result,
     });

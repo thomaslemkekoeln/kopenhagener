@@ -1,7 +1,9 @@
 export const useCounterStore = defineStore("counter", {
-  state: () => ({
-    users: [],
-  }),
+  state: () => {
+    return {
+      users: [],
+    };
+  },
   actions: {
     // since we rely on `this`, we cannot use an arrow function
     addUser(user) {
@@ -32,6 +34,9 @@ export const useCounterStore = defineStore("counter", {
       if (user) {
         user.result = player.result;
       }
+    },
+    updateUsers(users) {
+      this.users = users;
     },
   },
 });
