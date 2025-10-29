@@ -148,7 +148,7 @@ async function updateScore(event, index, player) {
         ResetPlayers
       </button>
     </div>
-    <div class="mb-4 p-2 pb-18" v-show="showScores">
+    <div class="mb-4 p-2 pt-6 pb-8" v-show="showScores">
       <table class="w-full table-auto border-collapse text-sm">
         <thead>
           <tr>
@@ -207,7 +207,7 @@ async function updateScore(event, index, player) {
         </tbody>
       </table>
       <table
-        class="w-full table-auto border-collapse text-sm fixed bottom-0 left-0"
+        class="w-full table-auto border-collapse text-sm fixed top-0 left-0"
       >
         <tbody>
           <tr class="">
