@@ -65,7 +65,7 @@ function clearUser(userName: string) {
         id="name"
         class="w-full border border-gray-300 p-2 rounded text-center"
       />
-      <p class="block text-gray-700 text-lg m-2">Wähle die Vorgabe</p>
+      <p class="block text-gray-700 text-lg m-2">Wähle die Löcher mitVorgabe</p>
       <div class="flex flex-wrap">
         <div v-for="index in 18" :key="index" class="w-1/6">
           <div>
