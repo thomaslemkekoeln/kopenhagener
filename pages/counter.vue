@@ -218,7 +218,7 @@ async function updateScore(event, index, player) {
             </td>
             <td
               v-for="player in players"
-              class="bg-green-200 border-2 border-gray-500 text-lg text-gray-500 dark:border-gray-700 dark:text-gray-400 p-4"
+              class="bg-green-200 border-2 border-gray-500 text-lg text-gray-500 dark:border-gray-700 dark:text-gray-400 p-1"
             >
               <span>
                 {{ `${player.name}:` }}

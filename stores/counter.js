@@ -23,8 +23,13 @@ export const useCounterStore = defineStore("counter", {
       return this.users.filter((user) => user.selected);
     },
     resetPlayers() {
+      const result = [];
+      for (let i = 0; i < 18; i++) {
+        result.push({ [i + 1]: 0 });
+      }
       this.users.forEach((user) => {
         user.selected = false;
+        user.result = result;
       });
     },
     updateScore(player) {
