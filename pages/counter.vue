@@ -91,7 +91,7 @@ async function updateScore(event, index, player) {
             <th
               class="border-b border-gray-200 p-2 font-medium text-gray-600 dark:border-gray-600 dark:text-gray-400"
             >
-              Select
+              Auswählen
             </th>
           </tr>
         </thead>
